@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="my-5">{{ post.title }}</h1>
+        
+        <div class="card mb-4">
+            <img class="card-img-top" src="{{ url_for('static', filename='images/' + post.image_id) }}" alt="Post image">
+            <div class="card-body">
+                <p class="card-text">{{ post.text }}</p>
+            </div>
+            <div class="card-footer text-muted">
+                Опубликовано {{ post.date.strftime('%d.%m.%Y в %H:%M') }}. Автор: {{ post.author }}
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <h3 class="mb-4">Комментарии ({{ post.comments|length }})</h3>
+            
+            {% for comment in post.comments %}
+                <div class="media mb-4">
+                    <div class="media-body">
+                        <h5 class="mt-0">{{ comment.author }}</h5>
+                        <p>{{ comment.text }}</p>
+                        
+                        {% if comment.replies %}
+                            {% for reply in comment.replies %}
+                                <div class="media mt-3">
+                                    <div class="media-body">
+                                        <h5 class="mt-0">{{ reply.author }}</h5>
+                                        <p>{{ reply.text }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="card my-4">
+                <h5 class="card-header">Оставьте комментарий</h5>
+                <div class="card-body">
+                    <form>
+                        <div class="form-group mb-3">
+                            <textarea class="form-control" rows="3" placeholder="Текст комментария"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
